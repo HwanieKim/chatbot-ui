@@ -1,17 +1,3 @@
-import { ChatbotUIContext } from "@/context/context"
-import { createAssistants } from "@/db/assistants"
-import { createChats } from "@/db/chats"
-import { createCollections } from "@/db/collections"
-import { createFiles } from "@/db/files"
-import { createPresets } from "@/db/presets"
-import { createPrompts } from "@/db/prompts"
-import { createTools } from "@/db/tools"
-import { IconUpload, IconX } from "@tabler/icons-react"
-import { FC, useContext, useRef, useState } from "react"
-import { toast } from "sonner"
-import { SIDEBAR_ICON_SIZE } from "../sidebar/sidebar-switcher"
-import { Badge } from "../ui/badge"
-import { Button } from "../ui/button"
 import {
   Dialog,
   DialogContent,
@@ -19,7 +5,23 @@ import {
   DialogFooter,
   DialogHeader
 } from "../ui/dialog"
+import { FC, useContext, useRef, useState } from "react"
+import { IconUpload, IconX } from "@tabler/icons-react"
+
+import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
+import { ChatbotUIContext } from "@/context/context"
 import { Input } from "../ui/input"
+import { SIDEBAR_ICON_SIZE } from "../sidebar/sidebar-switcher"
+import { createAssistants } from "@/db/assistants"
+import { createChats } from "@/db/chats"
+import { createCollections } from "@/db/collections"
+import { createExercises } from "@/db/exercises"
+import { createFiles } from "@/db/files"
+import { createPresets } from "@/db/presets"
+import { createPrompts } from "@/db/prompts"
+import { createTools } from "@/db/tools"
+import { toast } from "sonner"
 
 interface ImportProps {}
 
@@ -27,6 +29,7 @@ export const Import: FC<ImportProps> = ({}) => {
   const {
     profile,
     selectedWorkspace,
+    setExercises,
     setChats,
     setPresets,
     setPrompts,
@@ -42,6 +45,7 @@ export const Import: FC<ImportProps> = ({}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [importList, setImportList] = useState<Array<Record<string, any>>>([])
   const [importCounts, setImportCounts] = useState<{
+    exercises: number,
     chats: number
     presets: number
     prompts: number
@@ -50,6 +54,7 @@ export const Import: FC<ImportProps> = ({}) => {
     assistants: number
     tools: number
   }>({
+    exercises: 0,
     chats: 0,
     presets: 0,
     prompts: 0,
@@ -60,6 +65,7 @@ export const Import: FC<ImportProps> = ({}) => {
   })
 
   const stateUpdateFunctions = {
+    exercises: setExercises,
     chats: setChats,
     presets: setPresets,
     prompts: setPrompts,
@@ -99,6 +105,7 @@ export const Import: FC<ImportProps> = ({}) => {
 
       setImportCounts(prevCounts => {
         const countTypes = [
+          "exercises",
           "chats",
           "presets",
           "prompts",
@@ -132,6 +139,7 @@ export const Import: FC<ImportProps> = ({}) => {
   const handleCancel = () => {
     setImportList([])
     setImportCounts({
+      exercises: 0,
       chats: 0,
       presets: 0,
       prompts: 0,
@@ -148,6 +156,7 @@ export const Import: FC<ImportProps> = ({}) => {
     if (!selectedWorkspace) return
 
     const saveData: any = {
+      exercises: [],
       chats: [],
       presets: [],
       prompts: [],
@@ -165,6 +174,7 @@ export const Import: FC<ImportProps> = ({}) => {
     })
 
     const createdItems = {
+      exercises: await createExercises(saveData.exercises),
       chats: await createChats(saveData.chats),
       presets: await createPresets(saveData.presets, selectedWorkspace.id),
       prompts: await createPrompts(saveData.prompts, selectedWorkspace.id),
@@ -192,6 +202,7 @@ export const Import: FC<ImportProps> = ({}) => {
 
     setImportList([])
     setImportCounts({
+      exercises: 0,
       chats: 0,
       presets: 0,
       prompts: 0,

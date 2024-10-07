@@ -2,18 +2,6 @@
 
 "use client"
 
-import { ChatbotUIContext } from "@/context/context"
-import { getProfileByUserId } from "@/db/profile"
-import { getWorkspaceImageFromStorage } from "@/db/storage/workspace-images"
-import { getWorkspacesByUserId } from "@/db/workspaces"
-import { convertBlobToBase64 } from "@/lib/blob-to-b64"
-import {
-  fetchHostedModels,
-  fetchOllamaModels,
-  fetchOpenRouterModels
-} from "@/lib/models/fetch-models"
-import { supabase } from "@/lib/supabase/browser-client"
-import { Tables } from "@/supabase/types"
 import {
   ChatFile,
   ChatMessage,
@@ -23,10 +11,23 @@ import {
   OpenRouterLLM,
   WorkspaceImage
 } from "@/types"
-import { AssistantImage } from "@/types/images/assistant-image"
-import { VALID_ENV_KEYS } from "@/types/valid-keys"
-import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
+import {
+  fetchHostedModels,
+  fetchOllamaModels,
+  fetchOpenRouterModels
+} from "@/lib/models/fetch-models"
+
+import { AssistantImage } from "@/types/images/assistant-image"
+import { ChatbotUIContext } from "@/context/context"
+import { Tables } from "@/supabase/types"
+import { VALID_ENV_KEYS } from "@/types/valid-keys"
+import { convertBlobToBase64 } from "@/lib/blob-to-b64"
+import { getProfileByUserId } from "@/db/profile"
+import { getWorkspaceImageFromStorage } from "@/db/storage/workspace-images"
+import { getWorkspacesByUserId } from "@/db/workspaces"
+import { supabase } from "@/lib/supabase/browser-client"
+import { useRouter } from "next/navigation"
 
 interface GlobalStateProps {
   children: React.ReactNode
@@ -41,6 +42,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   // ITEMS STORE
   const [assistants, setAssistants] = useState<Tables<"assistants">[]>([])
   const [collections, setCollections] = useState<Tables<"collections">[]>([])
+  const [exercises, setExercises] = useState<Tables<"exercises">[]>([])
   const [chats, setChats] = useState<Tables<"chats">[]>([])
   const [files, setFiles] = useState<Tables<"files">[]>([])
   const [folders, setFolders] = useState<Tables<"folders">[]>([])
@@ -209,6 +211,8 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
         setAssistants,
         collections,
         setCollections,
+        exercises,
+        setExercises,
         chats,
         setChats,
         files,

@@ -7,3 +7,4 @@ export type ContentType =
   | "assistants"
   | "tools"
   | "models"
+  | "exercises"; // Add new content type here

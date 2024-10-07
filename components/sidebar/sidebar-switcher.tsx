@@ -1,4 +1,3 @@
-import { ContentType } from "@/types"
 import {
   IconAdjustmentsHorizontal,
   IconBolt,
@@ -9,11 +8,14 @@ import {
   IconRobotFace,
   IconSparkles
 } from "@tabler/icons-react"
+
+import { ContentType } from "@/types"
 import { FC } from "react"
-import { TabsList } from "../ui/tabs"
-import { WithTooltip } from "../ui/with-tooltip"
+import Image from "next/image"
 import { ProfileSettings } from "../utility/profile-settings"
 import { SidebarSwitchItem } from "./sidebar-switch-item"
+import { TabsList } from "../ui/tabs"
+import { WithTooltip } from "../ui/with-tooltip"
 
 export const SIDEBAR_ICON_SIZE = 28
 
@@ -27,6 +29,12 @@ export const SidebarSwitcher: FC<SidebarSwitcherProps> = ({
   return (
     <div className="flex flex-col justify-between border-r-2 pb-5">
       <TabsList className="bg-background grid h-[440px] grid-rows-7">
+        <SidebarSwitchItem
+          icon={<Image src="/DARK_BRAND_LOGO.png" alt="sus" width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} />}
+          contentType="exercises"
+          onContentTypeChange={onContentTypeChange}
+        />
+
         <SidebarSwitchItem
           icon={<IconMessage size={SIDEBAR_ICON_SIZE} />}
           contentType="chats"

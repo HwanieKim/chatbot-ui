@@ -1,10 +1,9 @@
-import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler"
-import { ChatbotUIContext } from "@/context/context"
-import { createFolder } from "@/db/folders"
-import { ContentType } from "@/types"
-import { IconFolderPlus, IconPlus } from "@tabler/icons-react"
 import { FC, useContext, useState } from "react"
+import { IconFolderPlus, IconPlus } from "@tabler/icons-react"
+
 import { Button } from "../ui/button"
+import { ChatbotUIContext } from "@/context/context"
+import { ContentType } from "@/types"
 import { CreateAssistant } from "./items/assistants/create-assistant"
 import { CreateCollection } from "./items/collections/create-collection"
 import { CreateFile } from "./items/files/create-file"
@@ -12,6 +11,8 @@ import { CreateModel } from "./items/models/create-model"
 import { CreatePreset } from "./items/presets/create-preset"
 import { CreatePrompt } from "./items/prompts/create-prompt"
 import { CreateTool } from "./items/tools/create-tool"
+import { createFolder } from "@/db/folders"
+import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler"
 
 interface SidebarCreateButtonsProps {
   contentType: ContentType
@@ -97,12 +98,14 @@ export const SidebarCreateButtons: FC<SidebarCreateButtonsProps> = ({
 
   return (
     <div className="flex w-full space-x-2">
-      <Button className="flex h-[36px] grow" onClick={getCreateFunction()}>
-        <IconPlus className="mr-1" size={20} />
-        New{" "}
-        {contentType.charAt(0).toUpperCase() +
-          contentType.slice(1, contentType.length - 1)}
-      </Button>
+      {(contentType != "exercises") && (
+        <Button className="flex h-[36px] grow " onClick={getCreateFunction()}>
+          <IconPlus className="mr-1" size={20} />
+          New{" "}
+          {contentType.charAt(0).toUpperCase() +
+            contentType.slice(1, contentType.length - 1)}
+        </Button>
+      )}
 
       {hasData && (
         <Button className="size-[36px] p-1" onClick={handleCreateFolder}>

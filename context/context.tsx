@@ -1,4 +1,3 @@
-import { Tables } from "@/supabase/types"
 import {
   ChatFile,
   ChatMessage,
@@ -8,9 +7,11 @@ import {
   OpenRouterLLM,
   WorkspaceImage
 } from "@/types"
-import { AssistantImage } from "@/types/images/assistant-image"
-import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { Dispatch, SetStateAction, createContext } from "react"
+
+import { AssistantImage } from "@/types/images/assistant-image"
+import { Tables } from "@/supabase/types"
+import { VALID_ENV_KEYS } from "@/types/valid-keys"
 
 interface ChatbotUIContext {
   // PROFILE STORE
@@ -22,6 +23,8 @@ interface ChatbotUIContext {
   setAssistants: Dispatch<SetStateAction<Tables<"assistants">[]>>
   collections: Tables<"collections">[]
   setCollections: Dispatch<SetStateAction<Tables<"collections">[]>>
+  exercises: Tables<"exercises">[]
+  setExercises: Dispatch<SetStateAction<Tables<"exercises">[]>>
   chats: Tables<"chats">[]
   setChats: Dispatch<SetStateAction<Tables<"chats">[]>>
   files: Tables<"files">[]
@@ -148,6 +151,8 @@ export const ChatbotUIContext = createContext<ChatbotUIContext>({
   setAssistants: () => {},
   collections: [],
   setCollections: () => {},
+  exercises: [],
+  setExercises: () => {},
   chats: [],
   setChats: () => {},
   files: [],
