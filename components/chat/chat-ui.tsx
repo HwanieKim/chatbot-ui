@@ -11,13 +11,20 @@ import { convertBlobToBase64 } from "@/lib/blob-to-b64"
 import useHotkey from "@/lib/hooks/use-hotkey"
 import { LLMID, MessageImage } from "@/types"
 import { useParams } from "next/navigation"
-import { FC, useContext, useEffect, useState } from "react"
+import { ComponentType, FC, useContext, useEffect, useState } from "react"
 import { ChatHelp } from "./chat-help"
 import { useScroll } from "./chat-hooks/use-scroll"
 import { ChatInput } from "./chat-input"
 import { ChatMessages } from "./chat-messages"
 import { ChatScrollButtons } from "./chat-scroll-buttons"
 import { ChatSecondaryButtons } from "./chat-secondary-buttons"
+import { PromptTextInput, PromptTextInputProps } from "./polyglot-prompt/prompt-text-input"
+import { ExerciseMock } from "@/lib/exercises/todo"
+import { PromptGenericInputProps } from "./polyglot-prompt/prompt-generic-props"
+import { PromptDropDownInput } from "./polyglot-prompt/prompt-dropdown"
+import { PromptBlockInput } from "./polyglot-prompt/prompt-block-input"
+import { InputType } from "zlib"
+import { ChatInputTypes } from "./polyglot-prompt/input-registry"
 
 interface ChatUIProps {}
 
@@ -55,8 +62,13 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
     scrollToTop
   } = useScroll()
 
+  
   const [loading, setLoading] = useState(true)
+  const [inputComponent, setInputComponent] =
+    useState<ChatInputTypes>("text")
 
+  const [selectedOption, setSelectedOption] = useState("")
+  //option handling (prob in todo.ts), and dropdowninput
   useEffect(() => {
     const fetchData = async () => {
       await fetchMessages()
@@ -70,12 +82,15 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
       fetchData().then(() => {
         handleFocusChatInput()
         setLoading(false)
+        setInputComponent(
+          ExerciseMock.getInputTypeFromExercise(params.chatid as string, 0)
+        )
       })
     } else {
       setLoading(false)
     }
   }, [])
-
+  //funzione switch per sparare componente in base al ritorno dal t
   const fetchMessages = async () => {
     const fetchedMessages = await getMessagesByChatId(params.chatid as string)
 
@@ -219,7 +234,7 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
       </div>
 
       <div className="relative w-full min-w-[300px] items-end px-2 pb-3 pt-0 sm:w-[600px] sm:pb-8 sm:pt-5 md:w-[700px] lg:w-[700px] xl:w-[800px]">
-        <ChatInput />
+        <ChatInput InputCazzoneNegro={inputComponent} />
       </div>
 
       <div className="absolute bottom-2 right-2 hidden md:block lg:bottom-4 lg:right-4">

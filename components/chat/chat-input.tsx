@@ -9,7 +9,15 @@ import {
   IconSend
 } from "@tabler/icons-react"
 import Image from "next/image"
-import { FC, useContext, useEffect, useRef, useState } from "react"
+import React, {
+  ComponentType,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { Input } from "../ui/input"
@@ -20,10 +28,20 @@ import { useChatHandler } from "./chat-hooks/use-chat-handler"
 import { useChatHistoryHandler } from "./chat-hooks/use-chat-history"
 import { usePromptAndCommand } from "./chat-hooks/use-prompt-and-command"
 import { useSelectFileHandler } from "./chat-hooks/use-select-file-handler"
+import {
+  PromptBlockInput,
+  PromptBlockInputProps
+} from "./polyglot-prompt/prompt-block-input"
+import { PromptTextInput } from "./polyglot-prompt/prompt-text-input"
+import { PromptGenericInputProps } from "./polyglot-prompt/prompt-generic-props"
+import { ChatInputTypes } from "./polyglot-prompt/input-registry"
+import { PromptDropDownInput } from "./polyglot-prompt/prompt-dropdown"
 
-interface ChatInputProps {}
+interface ChatInputProps {
+  InputCazzoneNegro: ChatInputTypes
+}
 
-export const ChatInput: FC<ChatInputProps> = ({}) => {
+export const ChatInput: FC<ChatInputProps> = ({ InputCazzoneNegro }) => {
   const { t } = useTranslation()
 
   useHotkey("l", () => {
@@ -161,7 +179,18 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
       }
     }
   }
-
+  let InputComponent = undefined
+  switch (InputCazzoneNegro) {
+    case "block":
+      InputComponent = PromptBlockInput
+      break;
+    case "dropdown":
+      InputComponent = PromptDropDownInput
+      break;
+    case "text":
+      InputComponent = PromptTextInput
+      break;
+  }
   return (
     <>
       <div className="flex flex-col flex-wrap justify-center gap-2">
@@ -236,7 +265,7 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
           />
         </>
 
-        <TextareaAutosize
+        <InputComponent
           textareaRef={chatInputRef}
           className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           placeholder={t(
@@ -244,14 +273,18 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
             `Ask anything. Type @  /  #  !`
           )}
           onValueChange={handleInputChange}
-          value={userInput}
+          value={userInput} // deve prendere input dall'utente, quindi tutti i figli devono avere tra le props
           minRows={1}
           maxRows={18}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           onCompositionStart={() => setIsTyping(true)}
-          onCompositionEnd={() => setIsTyping(false)}
-        />
+          onCompositionEnd={() => setIsTyping(false)} options={[]}        />
+
+        {/* <InputComponent
+          textareaRef={chatInputRef}
+          onValueChange={handleInputChange}
+        /> */}
 
         <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
           {isGenerating ? (
