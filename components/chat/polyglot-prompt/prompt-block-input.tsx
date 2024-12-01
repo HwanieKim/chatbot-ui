@@ -24,6 +24,7 @@ export const PromptBlockInput: FC<PromptBlockInputProps> = ({
   onPaste = () => {},
   onCompositionStart = () => {},
   onCompositionEnd = () => {}
+  
 }) => {
   const [selectedValue, setSelectedValue] = useState("")
 

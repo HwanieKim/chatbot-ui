@@ -4,7 +4,7 @@ import { PromptTextInput } from "./prompt-text-input"
 import { PromptBlockInput } from "./prompt-block-input"
 import { PromptDropDownInput } from "./prompt-dropdown"
 
-export type ChatInputTypes = "block" | "text" | "dropdown"
+export type ChatInputTypes = "block" | "text" | "dropdown" | "dragAndDrop"
 
 // const inputRegistry: { [key in ChatInputTypes]: ()=> FC<PromptGenericInputProps> } = {
 //   "text": () => PromptTextInput,

@@ -10,5 +10,4 @@ export interface PromptGenericInputProps {
   onCompositionStart?: (event: React.CompositionEvent) => void
   onCompositionEnd?: (event: React.CompositionEvent) => void
   onValueChange: (value: string) => void
-  // extraArgs: [...any]
 }

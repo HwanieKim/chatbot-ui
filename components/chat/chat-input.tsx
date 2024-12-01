@@ -32,16 +32,29 @@ import {
   PromptBlockInput,
   PromptBlockInputProps
 } from "./polyglot-prompt/prompt-block-input"
-import { PromptTextInput } from "./polyglot-prompt/prompt-text-input"
+import {
+  PromptTextInput,
+  PromptTextInputProps
+} from "./polyglot-prompt/prompt-text-input"
 import { PromptGenericInputProps } from "./polyglot-prompt/prompt-generic-props"
 import { ChatInputTypes } from "./polyglot-prompt/input-registry"
-import { PromptDropDownInput } from "./polyglot-prompt/prompt-dropdown"
+import {
+  PromptDropDownInput,
+  PromptDropDownInputProps
+} from "./polyglot-prompt/prompt-dropdown"
+// import { PromptDragAndDropComponentProps } from "./polyglot-prompt/prompt-drag-and-drop-component"
+// import { PromptDragAndDropComponent } from "./polyglot-prompt/prompt-drag-and-drop-component"
 
 interface ChatInputProps {
-  InputCazzoneNegro: ChatInputTypes
+  InputComponentType: ChatInputTypes
 }
+// type InputComponentProps =
+//   | PromptBlockInputProps
+//   | PromptTextInputProps
+//   | PromptDropDownInputProps
+//   | PromptDragAndDropComponentProps
 
-export const ChatInput: FC<ChatInputProps> = ({ InputCazzoneNegro }) => {
+export const ChatInput: FC<ChatInputProps> = ({ InputComponentType }) => {
   const { t } = useTranslation()
 
   useHotkey("l", () => {
@@ -180,16 +193,18 @@ export const ChatInput: FC<ChatInputProps> = ({ InputCazzoneNegro }) => {
     }
   }
   let InputComponent = undefined
-  switch (InputCazzoneNegro) {
+  switch (InputComponentType) {
     case "block":
       InputComponent = PromptBlockInput
-      break;
+      break
     case "dropdown":
       InputComponent = PromptDropDownInput
-      break;
+      break
     case "text":
       InputComponent = PromptTextInput
-      break;
+      break
+    // case "dragAndDrop":
+    // InputComponent = PromptDragAndDropComponent
   }
   return (
     <>
@@ -279,7 +294,9 @@ export const ChatInput: FC<ChatInputProps> = ({ InputCazzoneNegro }) => {
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           onCompositionStart={() => setIsTyping(true)}
-          onCompositionEnd={() => setIsTyping(false)} options={[]}        />
+          onCompositionEnd={() => setIsTyping(false)}
+          options={[]}
+        />
 
         {/* <InputComponent
           textareaRef={chatInputRef}
